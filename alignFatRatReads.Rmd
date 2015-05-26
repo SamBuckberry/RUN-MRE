@@ -1,0 +1,37 @@
+Mapping of Tina's Rat MRE-Seq data
+========================================================
+
+# Buliding the reference genome index
+
+rn5 reference genome and associated files was downloaded from illumina iGenomes:
+```
+wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Rattus_norvegicus/UCSC/rn5/Rattus_norvegicus_UCSC_rn5.tar.gz
+```
+
+Run preliminary alignment using bowtie 2 with the clipped reads option 
+```
+bowtie2 -q --local --no-mixed --time --threads 14 -x ~/genomes/Rattus_norvegicus/UCSC/rn5/Sequence/Bowtie2Index/genome -1 C583LANXX-7-Rat_GBS_NoIndex_L007_R1_001.fastq.gz -2 C583LANXX-7-Rat_GBS_NoIndex_L007_R2_001.fastq.gz -S allRatAlign.SAM
+```
+
+Convert to sorted BAM
+```
+samtools view -bS allRatAlign.SAM | samtools sort - allRatAlign.BAM
+```
+
+Create a bam index
+```
+samtools index allRatAlign.BAM.bam
+```
+
+Generate coverage graph file
+```
+genomeCoverageBed -bga -trackline -ibam allRatAlign.BAM > allRatAlign.bedgraph
+```
+
+Calculate some alignment stats
+```{r}
+library(QuasR)
+bamFile <- "~/tina_data/Project_JBCR_External//Sample_C583LANXX-7-Rat_GBS//allRatAlign.BAM.bam"
+bamStats <- alignmentStats(x=bamFile, )
+```
+
