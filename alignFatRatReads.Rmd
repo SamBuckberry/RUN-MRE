@@ -25,13 +25,13 @@ samtools index allRatAlign.BAM.bam
 
 Generate coverage graph file
 ```
-genomeCoverageBed -bga -trackline -ibam allRatAlign.BAM > allRatAlign.bedgraph
+genomeCoverageBed -bga -trackline -ibam allRatAlign.BAM.bam > allRatAlign.bedgraph
 ```
 
 Calculate some alignment stats
 ```{r}
 library(QuasR)
-bamFile <- "~/tina_data/Project_JBCR_External//Sample_C583LANXX-7-Rat_GBS//allRatAlign.BAM.bam"
-bamStats <- alignmentStats(x=bamFile, )
+bamFile <- list.files(path="~/tina_data/Project_JBCR_External/Sample_C583LANXX-7-Rat_GBS/", pattern=".bam$", full.names=TRUE)
+bamStats <- alignmentStats(x=bamFile)
 ```
 
